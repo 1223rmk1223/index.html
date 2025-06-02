@@ -6,152 +6,145 @@
   <title>ToDoリスト</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <style>
+    body {
+      background-color: #e0f7fa;
+      font-family: sans-serif;
+    }
+
+    .container {
+      padding: 1rem;
+      max-width: 42rem;
+      margin: auto;
+    }
+
+    input, button {
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+    }
+
+    input {
+      border: 1px solid #ccc;
+    }
+
     button {
       cursor: pointer;
     }
-    .p-4 {
-      padding: 1rem;
-    }
-    .max-w-2xl {
-      max-width: 42rem;
-    }
-    .mx-auto {
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .mb-4 {
-      margin-bottom: 1rem;
-    }
-    .mb-6 {
+
+    .category-box {
+      border: 2px solid #333; /* ←濃い線 */
+      border-radius: 0.5rem;
       margin-bottom: 1.5rem;
     }
-    .border {
-      border: 1px solid #ccc;
-    }
-    .rounded-lg {
+
+    .category-content {
+      background-color: white; /* ←カテゴリ内を白に */
+      padding: 1rem;
       border-radius: 0.5rem;
     }
-    .rounded {
+
+    .task-item {
+      background-color: #ffe4e6;
+      border: 2px solid #555; /* ←濃い線 */
       border-radius: 0.25rem;
-    }
-    .p-2 {
       padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .p-4 {
-      padding: 1rem;
+
+    .task-done {
+      background-color: #d0f0c0;
     }
-    .text-2xl {
-      font-size: 1.5rem;
-    }
-    .font-bold {
-      font-weight: bold;
-    }
-    .text-xl {
-      font-size: 1.25rem;
-    }
-    .font-semibold {
-      font-weight: 600;
-    }
-    .text-gray-700 {
-      color: #4a4a4a;
-    }
-    .text-blue-500 {
-      background-color: #3b82f6;
-    }
-    .text-blue-600 {
-      color: #2563eb;
-    }
-    .text-red-600 {
-      color: #dc2626;
-    }
-    .text-green-500 {
-      background-color: #22c55e;
-    }
-    .text-yellow-600 {
-      color: #ca8a04;
-    }
-    .bg-gray-100 {
-      background-color: #f3f4f6;
-    }
-    .bg-green-100 {
-      background-color: #dcfce7;
-    }
-    .text-white {
-      color: white;
-    }
-    .underline {
-      text-decoration: underline;
-    }
+
     .flex {
       display: flex;
-    }
-    .gap-2 {
       gap: 0.5rem;
     }
+
     .justify-between {
       justify-content: space-between;
     }
-    .items-center {
-      align-items: center;
+
+    .text-blue {
+      color: #2563eb;
     }
-    .w-full {
-      width: 100%;
+
+    .text-red {
+      color: #dc2626;
     }
-    .ml-auto {
-      margin-left: auto;
+
+    .text-yellow {
+      color: #ca8a04;
     }
+
+    .text-gray {
+      color: #4a4a4a;
+    }
+
+    .font-bold {
+      font-weight: bold;
+    }
+
+    .mb-1 { margin-bottom: 0.25rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .ml-auto { margin-left: auto; }
   </style>
 </head>
 <body>
-  <div id="app" class="p-4 max-w-2xl mx-auto" style="background-color: #e0f7fa;">
-    <h1 class="text-2xl font-bold mb-4">ToDoリスト</h1>
+  <div id="app" class="container">
+    <h1 class="text-2xl font-bold mb-4"></h1>
 
-    <div class="mb-4 flex gap-2">
-      <input v-model="newCategory" placeholder="新しいカテゴリ" class="border px-2 py-1 rounded" />
-      <button @click="addCategory" class="bg-blue-500 text-BLACK px-4 py-1 rounded">追加</button>
+    <div class="mb-4 flex">
+      <input v-model="newCategory" placeholder="新しい区分" />
+      <button @click="addCategory" style="background-color: #3b82f6; color: white;">追加</button>
     </div>
 
-    <div v-for="(category, catIndex) in categories" :key="catIndex" class="mb-6 border rounded-lg p-4">
-      <div class="flex justify-between items-center mb-2">
-        <h2 class="text-xl font-semibold">{{ category.name }}</h2>
-        <div class="flex gap-2">
-          <button @click="toggleCategory(catIndex)" class="text-sm text-blue-600 underline">
-            {{ category.show ? '折りたたむ' : '表示' }}
-          </button>
-          <button @click="removeCategory(catIndex)" class="text-sm text-red-600 underline">削除</button>
-        </div>
-      </div>
-
-      <div v-if="category.show">
-        <div class="flex gap-2 mb-2">
-          <input v-model="category.newTask" placeholder="新しいタスク" class="border px-2 py-1 rounded" />
-          <button @click="addTask(catIndex)" class="bg-green-500 text-BLACK px-4 py-1 rounded">追加</button>
+    <div v-for="(category, catIndex) in categories" :key="catIndex" class="category-box">
+      <div class="category-content">
+        <div class="flex justify-between mb-2">
+          <h2 class="font-bold">{{ category.name }}</h2>
+          <div class="flex">
+            <button @click="toggleCategory(catIndex)" class="text-blue underline">
+              {{ category.show ? '▼' : '表示' }}
+            </button>
+            <button @click="removeCategory(catIndex)" class="text-red underline">削除</button>
+          </div>
         </div>
 
-        <div>
-          <h3 class="font-semibold text-gray-700 mb-1">やること</h3>
-          <ul>
-            <li v-for="(task, taskIndex) in category.tasks.filter(t => !t.done)" :key="taskIndex" class="flex justify-between items-center p-2 rounded mb-1" style="background-color: #ffe4e6;">
-              <span>{{ task.text }}</span>
-              <div class="flex gap-2 ml-auto">
-                <button @click="toggleTask(catIndex, category.tasks.indexOf(task))" class="text-blue-600">実行</button>
-                <button @click="removeTask(catIndex, category.tasks.indexOf(task))" class="text-red-600">削除</button>
-              </div>
-            </li>
-          </ul>
-        </div>
+        <div v-if="category.show">
+          <div class="flex mb-2">
+            <input v-model="category.newTask" placeholder="やること/買うもの" />
+            <button @click="addTask(catIndex)" style="background-color: #22c55e; color: white;">追加</button>
+          </div>
 
-        <div class="mt-4">
-          <h3 class="font-semibold text-gray-700 mb-1">完了</h3>
-          <ul>
-            <li v-for="(task, taskIndex) in category.tasks.filter(t => t.done)" :key="taskIndex" class="flex justify-between items-center p-2 rounded mb-1" style="background-color: #d0f0c0;">
-              <span>{{ task.text }}</span>
-              <div class="flex gap-2 ml-auto">
-                <button @click="toggleTask(catIndex, category.tasks.indexOf(task))" class="text-yellow-600 bg-white border rounded px-3 py-1 min-w-[60px] text-center">戻す</button>
-                <button @click="removeTask(catIndex, category.tasks.indexOf(task))" class="text-red-600 bg-white border rounded px-3 py-1 min-w-[60px] text-center">削除</button>
-              </div>
-            </li>
-          </ul>
+          <div>
+            <h3 class="font-bold text-gray mb-1">未実行</h3>
+            <ul>
+              <li v-for="(task, taskIndex) in category.tasks.filter(t => !t.done)" :key="taskIndex" class="task-item">
+                <span>{{ task.text }}</span>
+                <div class="flex ml-auto">
+                  <button @click="toggleTask(catIndex, category.tasks.indexOf(task))" class="text-blue">実行</button>
+                  <button @click="removeTask(catIndex, category.tasks.indexOf(task))" class="text-red">削除</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-4">
+            <h3 class="font-bold text-gray mb-1">完了</h3>
+            <ul>
+              <li v-for="(task, taskIndex) in category.tasks.filter(t => t.done)" :key="taskIndex" class="task-item task-done">
+                <span>{{ task.text }}</span>
+                <div class="flex ml-auto">
+                  <button @click="toggleTask(catIndex, category.tasks.indexOf(task))" class="text-yellow border px-2">戻す</button>
+                  <button @click="removeTask(catIndex, category.tasks.indexOf(task))" class="text-red border px-2">削除</button>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -176,10 +169,8 @@
 
         const newCategory = ref('')
 
-        // ローカルストレージから復元
         if (localStorage.getItem('tasks')) {
           const saved = JSON.parse(localStorage.getItem('tasks'))
-          // newTaskプロパティを追加（復元データにないため）
           saved.forEach(cat => cat.newTask = '')
           categories.value = saved
         }
