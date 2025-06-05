@@ -158,17 +158,8 @@
 
     createApp({
       setup() {
-        const categories = ref([
-          {
-            name: 'カテゴリ1',
-            tasks: [
-              { text: 'タスク1', done: false, date: null },
-              { text: 'タスク2', done: true, date: new Date().toLocaleDateString() }
-            ],
-            show: true,
-            newTask: ''
-          }
-        ])
+        const categories = ref([])
+
 
         const newCategory = ref('')
 
